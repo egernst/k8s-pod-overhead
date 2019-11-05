@@ -3,7 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-    "io/ioutil"
+	"time"
+        //"github.com/prometheus/client_golang/prometheus"
+        //"github.com/prometheus/client_golang/prometheus/promauto"
+        "github.com/prometheus/client_golang/prometheus/promhttp"
+	"io/ioutil"
     "net/http"
     "net/url"
 	"k8s.io/client-go/rest"
@@ -62,7 +66,7 @@ func getSummary(client *http.Client) (*stats.Summary, error) {
 }
 
 
-func recordMetrics() {
+func recordPodMetrics(client *http.Client) {
         go func() {
                 for {
 
@@ -77,6 +81,7 @@ func recordMetrics() {
                 }
         }()
 }
+
 func main() {
 
   // setup a client configuration so we can access.
@@ -95,10 +100,8 @@ func main() {
 	  Transport: transport,
   }
 
-
-
   // startup process for pulling pod stats from kubelet
-  recordPodMetrics()
+  recordPodMetrics(client)
 
   // post metrics
   http.Handle("/metrics", promhttp.Handler())
