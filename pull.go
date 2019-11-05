@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"net"
 	"fmt"
     "io/ioutil"
-    "log"
     "net/http"
     "net/url"
 	"k8s.io/client-go/rest"
@@ -50,7 +48,7 @@ func getSummary(client *http.Client) (*stats.Summary, error) {
 
 	url := url.URL{
 		Scheme: scheme,
-		Host: net.JoinHostPort("localhost", "10250"),
+		Host: "kata-k8s-1:10250",
 		Path: "/stats/summary",
 		RawQuery: "only_cpu_and_memory=true",
 	}
@@ -64,39 +62,45 @@ func getSummary(client *http.Client) (*stats.Summary, error) {
 }
 
 
+func recordMetrics() {
+        go func() {
+                for {
 
+  summary, err := getSummary(client)
+  if err == nil {
+	fmt.Printf("summary: %v\n", summary)
+  } else {
+	fmt.Printf(" err: %v\n", err)
+  }
+
+                        time.Sleep(2 * time.Second)
+                }
+        }()
+}
 func main() {
 
   // setup a client configuration so we can access.
-  // Initially this is 100% totall terribly insecure:	
+  // Initially this is 100% totally, terribly insecure:	
   restConfig := &rest.Config{}
   restConfig = rest.AnonymousClientConfig(restConfig)
-  restConfig.TLSClientConfig = rest.TLSClientConfig{}
+  restConfig.TLSClientConfig = rest.TLSClientConfig{
+	Insecure: true,
+	CAData: nil,
+	CAFile: "",
+   }
+
+  transport, _ := rest.TransportFor(restConfig)
 
   client := &http.Client{
-	  Transport: rest.TransportFor(restConfig),
+	  Transport: transport,
   }
 
-  summary, err := getSummary(client)
 
-  if err == nil {
-   fmt.Printf("summary: %v\n", summary)
-  } else {
-   fmt.Printf(" err: %v\n", err)
-   }
-	resp, err := http.Get("https://kata-k8s-1:10250/stats/summary?only_cpu_and_memory=true")
-    if err != nil {
-        log.Fatalln(err)
-    }
 
-    defer resp.Body.Close()
+  // startup process for pulling pod stats from kubelet
+  recordPodMetrics()
 
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        log.Fatalln(err)
-    }
-
-    log.Println(string(body))
-    //  http.Handle("/metrics", promhttp.Handler())
-    //  http.ListenAndServe(":2112", nil)
+  // post metrics
+  http.Handle("/metrics", promhttp.Handler())
+  http.ListenAndServe(":2112", nil)
 }
