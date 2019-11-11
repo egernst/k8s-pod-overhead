@@ -17,6 +17,7 @@ spec:
       containers:
       - name: kube-kata
         image: egernst/kata-deploy:1.9.1
+        #image: katadocker/kata-deploy
         imagePullPolicy: Always
         lifecycle:
           preStop:

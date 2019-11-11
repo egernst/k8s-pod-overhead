@@ -7,7 +7,7 @@ nodeRegistration:
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
-cgroupDriver: systemd
+cgroupDriver: cgroupfs
 # Allowing for CPU pinning and isolation in case of guaranteed QoS class
 systemReserved:
   cpu: 500m
