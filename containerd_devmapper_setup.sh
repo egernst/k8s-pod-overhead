@@ -7,8 +7,8 @@ set -o pipefail
 sudo rm -rf /var/lib/containerd/devmapper/data-disk.img
 sudo rm -rf /var/lib/containerd/devmapper/meta-disk.img
 sudo mkdir -p /var/lib/containerd/devmapper
-sudo truncate --size 10G /var/lib/containerd/devmapper/data-disk.img
-sudo truncate --size 10G /var/lib/containerd/devmapper/meta-disk.img
+sudo truncate --size 20G /var/lib/containerd/devmapper/data-disk.img
+sudo truncate --size 20G /var/lib/containerd/devmapper/meta-disk.img
 
 sudo mkdir -p /etc/systemd/system
 
@@ -50,7 +50,7 @@ sudo mkdir -p /etc/containerd/
 cat <<EOT | sudo tee -a  /etc/containerd/config.toml
   [plugins.devmapper]
     pool_name = "contd-thin-pool"
-    base_image_size = "1024MB"
+    base_image_size = "4096MB"
    [plugins.cri.containerd]
      snapshotter = "devmapper"
 EOT
