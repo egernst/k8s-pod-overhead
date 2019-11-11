@@ -1,2 +1,11 @@
 # k8s-pod-overhead
-Daemonset for gathering pod overhead stats, scripts/yaml for setting up PodOverhead feature in Kubernetes
+
+Helper files for setting up cluster with PodOverhead enabled
+
+
+## Hacking:
+
+helpful watcher for containerd devmapper:
+```bash
+watch -d ls -al /dev/mapper && sudo du -khs /var/lib/containerd/devmapper/*
+```
