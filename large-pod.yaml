@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: elastic-pod
+spec:
+  containers:
+  - name: elastic
+    image: elasticsearch:7.4.2
+    stdin: true
+    tty: true
+    imagePullPolicy: Always
