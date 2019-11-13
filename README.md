@@ -40,6 +40,8 @@ kubectl apply -f kata-setup/kata-deploy.yaml
 kubectl apply -f kata-setup/kata-runtimeclasses.yaml
 ```
 
+After kata-deploy is up and running, you'll see kata artifacts are installed at /opt/kata, and that 'etc/containerd/config.toml' was updated to register the kata handlers.
+
 ### Example pods:
 
 Launch a few pods, utilizing runc, kata-fc and kata-qemu:
@@ -49,6 +51,8 @@ kubectl apply -f test-workloads/kata-fc-pod.yaml
 kubectl apply -f test-workloads/kata-qemu-pod.yaml
 kubectl apply -f test-workloads/runc-pod.yaml
 ```
+
+
 
 ## Hacking:
 
