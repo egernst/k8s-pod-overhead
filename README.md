@@ -4,7 +4,7 @@ Helper files for setting up cluster with PodOverhead enabled. This will create a
 
 ## setup
 
-This assumes you are on an Ubuntu VM which supports VMX.
+This assumes you are on an Ubuntu VM which supports VMX. I validated the below flow on an Azure standard d8s_v3 instance. (d*s_v3 supports virtualization)
 
 ### install pre-requisites, setup node:
 
