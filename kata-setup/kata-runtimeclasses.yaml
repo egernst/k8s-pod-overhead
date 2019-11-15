@@ -3,17 +3,17 @@ kind: RuntimeClass
 apiVersion: node.k8s.io/v1beta1
 metadata:
     name: kata-qemu
-handler: kata-qemu
+handler: kata-qemu-virtiofs
 overhead:
     podFixed:
-        memory: "100"
+        memory: "160Mi"
         cpu: "250m"
 ---
 kind: RuntimeClass
 apiVersion: node.k8s.io/v1beta1
 metadata:
     name: kata-no-overhead
-handler: kata-qemu
+handler: kata-qemu-virtiofs
 
 ---
 kind: RuntimeClass
@@ -23,5 +23,5 @@ metadata:
 handler: kata-fc
 overhead:
     podFixed:
-        memory: "100"
+        memory: "130Mi"
         cpu: "250m"
